@@ -1,7 +1,9 @@
+using AutoMapper;
 using DotnetAPI.Data;
 using DotnetAPI.Dtos;
 using DotnetAPI.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace DotnetAPI.Controllers;
 
@@ -10,6 +12,10 @@ namespace DotnetAPI.Controllers;
 public class UserEFController(IConfiguration config) : ControllerBase
 {
     readonly DataContextEF _entityFramework = new(config);
+    readonly IMapper _mapper = new Mapper(new MapperConfiguration(cfg =>
+    {
+        cfg.CreateMap<UserDto, User>();
+    }, NullLoggerFactory.Instance));
 
     [HttpGet("GetUsers")]
     public IEnumerable<User> GetUsers()
@@ -62,14 +68,7 @@ public class UserEFController(IConfiguration config) : ControllerBase
     [HttpPost("AddUser")]
     public IActionResult AddUser(UserDto user)
     {
-        User userDb = new()
-        {
-            Active = user.Active,
-            FirstName = user.FirstName,
-            LastName = user.LastName,
-            Email = user.Email,
-            Gender = user.Gender
-        };
+        User userDb = _mapper.Map<User>(user);
 
         _entityFramework.Add(userDb);
 
