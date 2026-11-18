@@ -9,9 +9,9 @@ namespace DotnetAPI.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class UserEFController(IConfiguration config, IUserRepository userRepository) : ControllerBase
+public class UserEFController(IUserRepository userRepository) : ControllerBase
 {
-    readonly IUserRepository _userRepository = userRepository;
+    private readonly IUserRepository _userRepository = userRepository;
     private readonly Mapper _mapper = new(new MapperConfiguration(cfg =>
     {
         cfg.CreateMap<UserDto, User>();
