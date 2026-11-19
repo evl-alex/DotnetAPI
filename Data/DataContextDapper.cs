@@ -50,7 +50,7 @@ namespace DotnetAPI.Data
 
             dbConnection.Close();
 
-            return dbConnection.Execute(sql) > 0;
+            return rowsAffected > 0;
         }
     }
 }
